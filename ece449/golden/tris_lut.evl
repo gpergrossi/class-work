@@ -1,0 +1,107 @@
+// tris and lut
+
+module test;
+
+  // 4-to-1 mux
+  
+  wire [3:0] bit_addr;
+  wire [15:0] one_hot;
+  wire [3:0] nn;
+  wire en;
+  
+  evl_one(en);
+   
+  not(nn[0], bit_addr[0]);
+  not(nn[1], bit_addr[1]);
+  not(nn[2], bit_addr[2]);
+  not(nn[3], bit_addr[3]);
+
+  and(one_hot[0], nn[3], nn[2], nn[1], nn[0], en);
+  and(one_hot[1], nn[3], nn[2], nn[1], bit_addr[0], en);
+  and(one_hot[2], nn[3], nn[2], bit_addr[1], nn[0], en);
+  and(one_hot[3], nn[3], nn[2], bit_addr[1], bit_addr[0], en);
+  and(one_hot[4], nn[3], bit_addr[2], nn[1], nn[0], en);
+  and(one_hot[5], nn[3], bit_addr[2], nn[1], bit_addr[0], en);
+  and(one_hot[6], nn[3], bit_addr[2], bit_addr[1], nn[0], en);
+  and(one_hot[7], nn[3], bit_addr[2], bit_addr[1], bit_addr[0], en);
+  and(one_hot[8], bit_addr[3], nn[2], nn[1], nn[0], en);
+  and(one_hot[9], bit_addr[3], nn[2], nn[1], bit_addr[0], en);
+  and(one_hot[10], bit_addr[3], nn[2], bit_addr[1], nn[0], en);
+  and(one_hot[11], bit_addr[3], nn[2], bit_addr[1], bit_addr[0], en);
+  and(one_hot[12], bit_addr[3], bit_addr[2], nn[1], nn[0], en);
+  and(one_hot[13], bit_addr[3], bit_addr[2], nn[1], bit_addr[0], en);
+  and(one_hot[14], bit_addr[3], bit_addr[2], bit_addr[1], nn[0], en);
+  and(one_hot[15], bit_addr[3], bit_addr[2], bit_addr[1], bit_addr[0], en);
+  
+  wire mux_out;
+  wire [15:0] mux_in;
+   
+  tris(mux_out, mux_in[0], one_hot[0]);
+  tris(mux_out, mux_in[1], one_hot[1]);
+  tris(mux_out, mux_in[2], one_hot[2]);
+  tris(mux_out, mux_in[3], one_hot[3]);
+  tris(mux_out, mux_in[4], one_hot[4]);
+  tris(mux_out, mux_in[5], one_hot[5]);
+  tris(mux_out, mux_in[6], one_hot[6]);
+  tris(mux_out, mux_in[7], one_hot[7]);
+  tris(mux_out, mux_in[8], one_hot[8]);
+  tris(mux_out, mux_in[9], one_hot[9]);
+  tris(mux_out, mux_in[10], one_hot[10]);
+  tris(mux_out, mux_in[11], one_hot[11]);
+  tris(mux_out, mux_in[12], one_hot[12]);
+  tris(mux_out, mux_in[13], one_hot[13]);
+  tris(mux_out, mux_in[14], one_hot[14]);
+  tris(mux_out, mux_in[15], one_hot[15]);
+    
+  // rom
+  
+  evl_lut rom(mux_in, a[7:4]);
+  
+  // counter
+
+  wire [7:0] a, s;
+  wire clk;
+
+  evl_clock(clk);
+  evl_dff(a[0], s[0], clk);
+  evl_dff(a[1], s[1], clk);
+  evl_dff(a[2], s[2], clk);
+  evl_dff(a[3], s[3], clk);
+  evl_dff(a[4], s[4], clk);
+  evl_dff(a[5], s[5], clk);
+  evl_dff(a[6], s[6], clk);
+  evl_dff(a[7], s[7], clk);
+     
+  // compute s=a+1
+  
+  wire [7:0] ci;
+  
+  evl_one(ci[0]);
+  
+  xor(s[0], a[0], ci[0]);
+  xor(s[1], a[1], ci[1]);
+  xor(s[2], a[2], ci[2]);
+  xor(s[3], a[3], ci[3]); 
+  xor(s[4], a[4], ci[4]);
+  xor(s[5], a[5], ci[5]); 
+  xor(s[6], a[6], ci[6]);
+  xor(s[7], a[7], ci[7]); 
+
+  and(ci[1], a[0], ci[0]);
+  and(ci[2], a[1], ci[1]);
+  and(ci[3], a[2], ci[2]);
+  and(ci[4], a[3], ci[3]);
+  and(ci[5], a[4], ci[4]);
+  and(ci[6], a[5], ci[5]);
+  and(ci[7], a[6], ci[6]);
+ 
+  // connections and output
+  
+  buf(bit_addr[0], a[0]);
+  buf(bit_addr[1], a[1]);
+  buf(bit_addr[2], a[2]);
+  buf(bit_addr[3], a[3]);
+ 
+  evl_output sim_out(a[7:4], a[3:0], mux_out, mux_in);
+
+endmodule

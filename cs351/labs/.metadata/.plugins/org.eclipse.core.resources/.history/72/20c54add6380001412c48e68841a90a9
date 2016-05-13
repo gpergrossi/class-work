@@ -1,0 +1,433 @@
+/*
+ * mm-naive.c - The fastest, least memory-efficient malloc package.
+ */
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <assert.h>
+#include <unistd.h>
+
+#include "mm.h"
+#include "memlib.h"
+
+/* single word (4) or double word (8) alignment */
+#define ALIGNMENT 8
+
+/* rounds up to the nearest multiple of ALIGNMENT */
+#define ALIGN(size) (((size) + (ALIGNMENT-1)) & ~(ALIGNMENT-1))
+#define PAD(size) 	(ALIGN(size) - size)
+
+#define SIZE_T_SIZE	ALIGN(sizeof(size_t))
+#define SIZE_T_PAD	PAD(sizeof(size_t))
+
+#define BLOCK_SIZE(size)	(ALIGN(SIZE_T_SIZE + size) + SIZE_T_SIZE)
+#define MIN_BLOCK_SIZE	BLOCK_SIZE(3*sizeof(mm_node*))
+
+#define DEBUG_MODE 0
+
+typedef struct mm_node_s mm_node;
+struct mm_node_s {
+	size_t size;
+	char mpad[SIZE_T_PAD]; 	// Guarantee alignment
+
+	// Allocated chunks
+	char payload[0]; 		// Useful offset, marks payload in allocated chunks
+
+	// Unallocated chunks
+	mm_node *prev;
+	mm_node *next;
+	mm_node *same;
+
+	// Allocated chunk data
+	// Footer size_t
+};
+
+mm_node *first_node;
+void *wilderness;
+
+/*
+ * mm_init - initialize the malloc package.
+ */
+int mm_init(void) {
+	first_node = NULL;
+	wilderness = mem_heap_lo();
+	return 0;
+}
+
+void print_heap() {
+	printf("Beginning (%p)\n", mem_heap_lo());
+    char *node = mem_heap_lo();
+    char *foot;
+    char *end = wilderness;
+    while (node < end) {
+    	size_t size = *(size_t *)node;
+    	int alloc = (size & 1);
+    	size = (size & ~1);
+
+        foot = node + size - SIZE_T_SIZE;
+        size_t verify = *(size_t *)foot;
+        if (verify != size) {
+            printf("%p : BROKEN block (size %d)\n", node, (int)size);
+            printf("%p - %p : data\n", node+SIZE_T_SIZE, foot);
+            printf("%p : Footer (size %d)\n", foot, (int)verify);
+        	break;
+        } else {
+        	printf("%p : %s block (size %d)\n", node, alloc ? "Allocated" : "Free", (int)size);
+//        	printf("%p - %p : data\n", node+SIZE_T_SIZE, foot);
+//        	printf("%p : Footer (size %d)\n", foot, (int)verify);
+        }
+
+        node = node + size;
+        if(size == 0) break;
+    }
+	printf("End of heap (%p)\n", wilderness);
+    printf("\n");
+	fflush(stdout);
+}
+
+void print_same(mm_node *node) {
+	int count = 1;
+	mm_node *scout = node->same;
+	while (scout != NULL) {
+		count++;
+		scout = scout->next;
+	}
+	printf("[%d *%d]", (int) node->size, count);
+	fflush(stdout);
+}
+
+void print_free_tree() {
+	mm_node *node = (mm_node *)first_node;
+	while (node != NULL) {
+		print_same(node);
+		printf("->");
+		node = node->next;
+	}
+	printf("NULL\n");
+	fflush(stdout);
+}
+
+/**
+ * Expands the wilderness and returns a node pointer to an initialized chunk of the correct block size.
+ * Initialized memory includes an aligned header size, aligned payload, and aligned footer
+ * with header and footer set to block_size with allocated bit on.
+ * Errors: NULL may be returned if the memory simulator has run out of memory.
+ */
+mm_node *mm_make_block(size_t block_size) {
+	size_t expand_by = block_size;
+	void *end_of_heap = mem_heap_hi()+1;
+	long success;
+	char *new;
+	if (wilderness < end_of_heap) {
+		// Make use of last chunk before end of heap (if available)
+		if (end_of_heap - wilderness > block_size) {
+			expand_by = 0;
+			success = 1;
+		} else {
+			expand_by = expand_by - (end_of_heap - wilderness);
+			success = (long) mem_sbrk(expand_by);
+		}
+		new = wilderness;
+	} else {
+		new = mem_sbrk(expand_by);
+		success = (long) new;
+	}
+
+	// Move wilderness pointer to new position
+	wilderness = (char *)wilderness + block_size;
+
+	// Verify success
+	if (success == -1) {
+		return (mm_node *) NULL;
+	} else {
+		// Create header and footer
+		*(size_t *)new = block_size | 1; // Allocated
+		*(size_t *)(new + block_size - SIZE_T_SIZE) = block_size;
+		return (mm_node *) new;
+	}
+}
+
+void mm_add_block(size_t size, mm_node *block) {
+#if DEBUG_MODE > 0
+	printf("Add %p (%d): ", block, (int)size);
+	print_free_tree();
+#endif
+
+	if (first_node == NULL) {
+		first_node = block;
+		block->prev = NULL;
+		block->next = NULL;
+		block->same = NULL;
+#if DEBUG_MODE > 0
+		printf(": ");
+		print_free_tree();
+#endif
+		return;
+	}
+
+	mm_node *same = NULL;
+	mm_node *prev = NULL;
+	mm_node *next = (mm_node *)first_node;
+	while (next != NULL && next->size < size) {
+		prev = next;
+		next = next->next;
+	}
+
+	// Check if same size (if so, add to secondary d-list)
+	if (next != NULL && next->size == size) {
+		if (next->same == NULL) {
+			// Set to become d-list
+			next->same = block;
+			same = next;
+			prev = NULL;
+			next = NULL;
+		} else {
+			// Set to insert at start of d-list
+			mm_node *temp = next->same;
+			next->same = block;
+			same = next;
+			prev = NULL;
+			next = temp;
+			temp->same = NULL;
+		}
+	} else {
+		if (prev == NULL) first_node = block;
+	}
+
+	// Do the actual insert logic
+	block->prev = prev;
+	block->next = next;
+	block->same = same;
+	if (prev != NULL) prev->next = block;
+	if (next != NULL) next->prev = block;
+
+#if DEBUG_MODE > 0
+	printf(": ");
+	print_free_tree();
+#endif
+}
+
+void mm_remove_block(mm_node *block) {
+#if DEBUG_MODE > 0
+	printf("Remove %p (%d): ", block, (int) block->size);
+	print_free_tree();
+#endif
+	if (block == first_node) {
+#if DEBUG_MODE > 2
+		printf("- First node to be removed\n"); fflush(stdout);
+#endif
+		if (block->same == NULL) {
+			first_node = first_node->next;
+		} else {
+			mm_node* icon = block->same;
+			mm_remove_block(icon);				// Remove list head out of d-list
+
+			// Promote old list head to icon position (my god)
+			if (block->next != NULL) block->next->prev = icon;
+			icon->prev = NULL;
+			icon->next = block->next;
+			icon->same = block->same;
+			if (icon->same != NULL)	icon->same->same = icon;
+			first_node = icon;
+		}
+	} else if (block->same == NULL) {
+#if DEBUG_MODE > 2
+		printf("- General d-node to be removed\n"); fflush(stdout);
+#endif
+		// Remove general case doubly linked list nodes
+		if (block->prev != NULL) block->prev->next = block->next;
+		if (block->next != NULL) block->next->prev = block->prev;
+	} else if (block->prev != NULL) {
+#if DEBUG_MODE > 2
+		printf("- List icon to be removed\n"); fflush(stdout);
+#endif
+		mm_node* icon = block->same;
+		mm_remove_block(icon);				// Remove old list head
+
+		// Promote old list head to icon position
+		if (block->prev != NULL) block->prev->next = icon;
+		if (block->next != NULL) block->next->prev = icon;
+		icon->prev = block->prev;
+		icon->next = block->next;
+		icon->same = block->same;
+		if (icon->same != NULL)	icon->same->same = icon;
+	} else {
+		// Block is head of a list (I love this) because: same != NULL, prev == NULL, block != first_node.
+#if DEBUG_MODE > 2
+		printf("- List head to be removed\n"); fflush(stdout);
+#endif
+		if (block->next != NULL) {
+			block->next->prev = NULL;
+			block->next->same = block->same;
+		}
+		block->same->same = block->next;
+	}
+#if DEBUG_MODE > 0
+	printf(": ");
+	print_free_tree();
+#endif
+}
+
+/**
+ * Takes the block provided and "coalesces" it with surrounding free blocks.
+ * Any free neighbors consumed are removed from the free list and the resulting
+ * larger block is updated to the correct size, marked free, and added to the list.
+ *
+ * If this block borders the wilderness address, the larger block may not be
+ * added to the free list but instead the wilderness address will move back to
+ * include the beginning of the new, larger block.
+ */
+void mm_coalesce_block(mm_node *block) {
+//	size_t size = block->size & ~1;
+//	*(size_t*)block = size;
+//	mm_add_block(size, block);
+	size_t size = block->size & ~1;
+	char *coalesce_beg = (char *)block;
+	char *coalesce_end = (char *)block+size;
+
+	// Locate previous
+	if (coalesce_beg > (char *)mem_heap_lo()) {
+		char *prev = coalesce_beg - SIZE_T_SIZE;
+		size_t prev_size = *(size_t *)prev;
+		prev = coalesce_beg - prev_size;
+		size_t prev_head = *(size_t *)prev;
+		if ((prev_head & 1) == 0) {
+			coalesce_beg = prev;
+			mm_remove_block((mm_node *)prev);
+		}
+	}
+
+	// Locate next
+	if (coalesce_end < (char *)wilderness) {
+		char *next = coalesce_end;
+		size_t next_head = *(size_t *)next;
+		if ((next_head & 1) == 0) {
+			coalesce_end = coalesce_end + next_head;
+			mm_remove_block((mm_node *)next);
+		}
+	} else {
+		// This block is the new wilderness
+#if DEBUG_MODE > 0
+		printf("Wilderness consumes %d bytes.\n", (int)(coalesce_end - coalesce_beg)); fflush(stdout);
+#endif
+		wilderness = coalesce_beg;
+		return;
+	}
+
+	// Free block / coalesce
+	size = coalesce_end - coalesce_beg;
+	*(size_t*)coalesce_beg = size;
+	*(size_t*)(coalesce_end - SIZE_T_SIZE) = size;
+
+	// Add to free structure
+	mm_add_block(size, (mm_node *)coalesce_beg);
+}
+
+/**
+ * Finds a block, splits if it needs to, coalesces if it needs to,
+ * makes a new block if it needs to, marks the block as allocated,
+ * removes the block from the free list, and returns the block node
+ */
+mm_node *mm_grab_block(size_t block_size) {
+	mm_node *node = (mm_node *)first_node;
+	while (node != NULL && node->size < block_size) {
+		node = node->next;
+	}
+	if (node != NULL) {
+		mm_remove_block(node);			// Remove from free list
+		if (node->size - block_size > MIN_BLOCK_SIZE) {
+			void *div = (char*)node + block_size;
+			void *end = (char *)node + node->size;
+
+			// Resize allocated section and mark allocated
+			node->size = (block_size | 1);
+			*(size_t *)((char *)div - SIZE_T_SIZE) = block_size;
+
+			// Create and add new free region
+			size_t free_size = (char *)end - (char *)div;
+			*(size_t *)div = free_size;
+			*(size_t *)((char *)end - SIZE_T_SIZE) = free_size;
+			mm_add_block(free_size, (mm_node *)div);
+		} else {
+			node->size = (node->size | 1);	// Mark as allocated
+		}
+	}
+
+	if (node == NULL) {
+		return mm_make_block(block_size);
+	}
+	return node;
+}
+
+mm_node *mm_resize_block(mm_node *block, size_t block_size) {
+	size_t size = (block->size & ~1);
+	if (block_size < size) {
+		// TODO shrink block, cut, coalesce
+		return block;
+	} else {
+		// TODO grow block, check for coalesce
+		// TODO use size doubling on block growth
+		mm_node *new_block = mm_grab_block(block_size*2);
+		if (new_block == (mm_node *)NULL) return new_block;
+
+		// TODO this breaks shit
+		memcpy(&new_block->payload, &block->payload, size - 2*SIZE_T_SIZE);
+		mm_coalesce_block(block);
+		return new_block;
+	}
+}
+
+/*
+ * mm_malloc - Allocate a block by incrementing the brk pointer.
+ *     Always allocate a block whose size is a multiple of the alignment.
+ */
+void *mm_malloc(size_t size) {
+#if DEBUG_MODE > 1
+	printf("\nmalloc(%d)\n", (int)size);
+#endif
+
+	size_t block_size = BLOCK_SIZE(size);
+	if (block_size < MIN_BLOCK_SIZE) block_size = MIN_BLOCK_SIZE;
+
+	mm_node *node = mm_grab_block(block_size);	// grab a block node
+
+	if (node == (mm_node *)NULL) return (void *)NULL;
+	return &(node->payload);					// return pointer to payload
+}
+
+/*
+ * mm_free - Freeing a block does nothing.
+ */
+void mm_free(void *ptr) {
+#if DEBUG_MODE > 1
+	printf("\nfree(%p)\n", ptr);
+#endif
+	mm_node *block = (mm_node *) ((char *)ptr - SIZE_T_SIZE);
+	mm_coalesce_block(block);
+}
+
+/*
+ * mm_realloc - Implemented simply in terms of mm_malloc and mm_free
+ */
+void *mm_realloc(void *ptr, size_t size) {
+#if DEBUG_MODE > 1
+	printf("\nrealloc(%p, %d)\n", ptr, (int)size);
+#endif
+	if (ptr == (void *)NULL) {
+		if (size == 0) return (void *)NULL;
+		return mm_malloc(size);
+	}
+	if (size == 0) {
+		mm_free(ptr);
+		return (void *)NULL;
+	}
+
+	mm_node *block = (mm_node *) ((char *)ptr - SIZE_T_SIZE);
+	size_t block_size = BLOCK_SIZE(size);
+	if (block_size < MIN_BLOCK_SIZE) block_size = MIN_BLOCK_SIZE;
+
+	mm_node *node = mm_resize_block(block, block_size);
+	if (node == (mm_node *)NULL) return (void *)NULL;
+	return &(node->payload);
+//	return (void *)NULL;
+}

@@ -1,0 +1,15 @@
+// A simple synchronous sequential circuit without using buses.
+
+module top;
+
+  wire clk, D, Q;
+
+  evl_clock(clk);
+
+  evl_dff(Q, D, clk);
+
+  not(D, Q);
+  
+  evl_output sim_out(D, Q);
+
+endmodule

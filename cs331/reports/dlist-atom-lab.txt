@@ -1,0 +1,305 @@
+Lab report for Doubly Linked Lists with Atoms - gpergros
+Timestamp: 2013-10-28 23:27:31
+
+|  :scenario |                                   :title |                              :result | :score |
+|------------+------------------------------------------+--------------------------------------+--------|
+|    working |    Test student code vs instructor tests |                                 Fail |     37 |
+| qualifying |    Test student tests vs instructor code |                                 Pass |      5 |
+|    broke-1 |     Insert front doesn't increment size. | Pass: Student tests detected errors. |      5 |
+|    broke-2 |  Insert front doens't set previous link. | Pass: Student tests detected errors. |      5 |
+|    broke-3 |               Insert last inserts front. | Pass: Student tests detected errors. |      5 |
+|    broke-4 |        Insert-sorted misses a back-link. | Pass: Student tests detected errors. |      5 |
+|    broke-5 |         Index-forward doesn't return nil | Pass: Student tests detected errors. |      5 |
+|    broke-6 | Index-backward returns positive numbers. | Pass: Student tests detected errors. |      5 |
+|    broke-7 |                Index-backward off by one | Pass: Student tests detected errors. |      5 |
+|    broke-8 |            Delete assumes list is sorted | Pass: Student tests detected errors. |      5 |
+|    broke-9 |      Reverse doesn't fix the back edges. | Pass: Student tests detected errors. |      5 |
+|   broke-10 |        List to Dlist messes up pointers. | Pass: Student tests detected errors. |      5 |
+|      total |                              Total Score |                                      |     92 |
+
+Details:
+
+
+** Details for Test student code vs instructor tests
+
+................F......FFF.......F.F
+
+Failures:
+
+  1) Insert-last multiple times will convert to a list properly
+     Expected: (10 20 30)
+          got: (30 20 10) (using =)
+     /home/grader/quarry/dlist-atom-lab/gpergros/working/spec/dlist_atom/core_spec.clj:126
+
+  2) Insert-sorted multiple times will insert 10 20 30 properly
+     Expected: (10 20 30)
+          got: (30 20 10) (using =)
+     /home/grader/quarry/dlist-atom-lab/gpergros/working/spec/dlist_atom/core_spec.clj:177
+
+  3) Insert-sorted multiple times will insert 30 20 10 properly
+     Expected: (10 20 30)
+          got: (30 20 10) (using =)
+     /home/grader/quarry/dlist-atom-lab/gpergros/working/spec/dlist_atom/core_spec.clj:184
+
+  4) Insert-sorted multiple times will insert 10 30 20 properly
+     Expected: (10 20 30)
+          got: (30 20 10) (using =)
+     /home/grader/quarry/dlist-atom-lab/gpergros/working/spec/dlist_atom/core_spec.clj:191
+
+  5) delete deletes elements properly.
+     Expected: (8 6 7 3 0 9)
+          got: (9 0 3 7 6 8) (using =)
+     /home/grader/quarry/dlist-atom-lab/gpergros/working/spec/dlist_atom/core_spec.clj:250
+
+  6) reverse should reverse full lists.
+     Expected: (9 0 3 5 7 6 8)
+          got: (8 6 7 5 3 0 9) (using =)
+     /home/grader/quarry/dlist-atom-lab/gpergros/working/spec/dlist_atom/core_spec.clj:299
+
+Finished in 0.06918 seconds
+36 examples, 6 failures
+WARNING: reverse already refers to: #'clojure.core/reverse in namespace: dlist-atom.core, being replaced by: #'dlist-atom.core/reverse
+
+
+** Details for Test student tests vs instructor code
+
+.....................
+
+Finished in 0.00369 seconds
+21 examples, 0 failures
+WARNING: reverse already refers to: #'clojure.core/reverse in namespace: dlist-atom.core-spec, being replaced by: #'dlist-atom.core/reverse
+
+
+** Details for Insert front doesn't increment size.
+
+....F................
+
+Failures:
+
+  1) insert-front should increase the size of the list
+     Expected: 1
+          got: 0 (using =)
+     /home/grader/quarry/dlist-atom-lab/gpergros/broke-1/spec/dlist_atom/core_spec.clj:28
+
+Finished in 0.01653 seconds
+21 examples, 1 failures
+WARNING: reverse already refers to: #'clojure.core/reverse in namespace: dlist-atom.core-spec, being replaced by: #'dlist-atom.core/reverse
+
+
+** Details for Insert front doens't set previous link.
+
+.............F.......
+
+Failures:
+
+  1) index-backward should return an expected result
+     Expected: -1
+          got: nil (using =)
+     /home/grader/quarry/dlist-atom-lab/gpergros/broke-2/spec/dlist_atom/core_spec.clj:73
+
+Finished in 0.01694 seconds
+21 examples, 1 failures
+WARNING: reverse already refers to: #'clojure.core/reverse in namespace: dlist-atom.core-spec, being replaced by: #'dlist-atom.core/reverse
+
+
+** Details for Insert last inserts front.
+
+.....F.F.F......FFFFF
+
+Failures:
+
+  1) insert-front should make the first element n
+     Expected: (1337 5 9 31)
+          got: (1337 31 9 5) (using =)
+     /home/grader/quarry/dlist-atom-lab/gpergros/broke-3/spec/dlist_atom/core_spec.clj:32
+
+  2) insert-last should make the last element n
+     Expected: (5 9 31 1337)
+          got: (1337 31 9 5) (using =)
+     /home/grader/quarry/dlist-atom-lab/gpergros/broke-3/spec/dlist_atom/core_spec.clj:42
+
+  3) insert-sorted should maintain sorting
+     Expected: (1 2 4 8 12 16)
+          got: (12 16 8 4 2 1) (using =)
+     /home/grader/quarry/dlist-atom-lab/gpergros/broke-3/spec/dlist_atom/core_spec.clj:52
+
+  4) list-to-dlist should be in the same order
+     Expected: (1 7 2 13 9)
+          got: (9 13 2 7 1) (using =)
+     /home/grader/quarry/dlist-atom-lab/gpergros/broke-3/spec/dlist_atom/core_spec.clj:81
+
+  5) delete should only delete one
+     Expected: (1 2 3 4 5)
+          got: (5 4 3 2 1) (using =)
+     /home/grader/quarry/dlist-atom-lab/gpergros/broke-3/spec/dlist_atom/core_spec.clj:88
+
+  6) delete should reduce the size when it finds the element
+     Expected: (1 2 4 5)
+          got: (5 4 2 1) (using =)
+     /home/grader/quarry/dlist-atom-lab/gpergros/broke-3/spec/dlist_atom/core_spec.clj:93
+
+  7) delete should not delete anything if the element isn't there
+     Expected: (1 2 4 5)
+          got: (5 4 2 1) (using =)
+     /home/grader/quarry/dlist-atom-lab/gpergros/broke-3/spec/dlist_atom/core_spec.clj:98
+
+  8) reverse should reverse the whole list
+     Expected: (5 4 3 2 1)
+          got: (1 2 3 4 5) (using =)
+     /home/grader/quarry/dlist-atom-lab/gpergros/broke-3/spec/dlist_atom/core_spec.clj:105
+
+Finished in 0.03594 seconds
+21 examples, 8 failures
+WARNING: reverse already refers to: #'clojure.core/reverse in namespace: dlist-atom.core-spec, being replaced by: #'dlist-atom.core/reverse
+
+
+** Details for Insert-sorted misses a back-link.
+
+.........F...........
+
+Failures:
+
+  1) insert-sorted should maintain sorting
+     Expected: (16 12 8 6 4 2 1)
+          got: (16 8 4 2 1) (using =)
+     /home/grader/quarry/dlist-atom-lab/gpergros/broke-4/spec/dlist_atom/core_spec.clj:55
+
+Finished in 0.09536 seconds
+21 examples, 1 failures
+WARNING: reverse already refers to: #'clojure.core/reverse in namespace: dlist-atom.core-spec, being replaced by: #'dlist-atom.core/reverse
+
+
+** Details for Index-forward doesn't return nil
+
+..........F..........
+
+Failures:
+
+  1) index-forward should return nil when it can't find the element
+     Expected: nil
+          got: 0 (using =)
+     /home/grader/quarry/dlist-atom-lab/gpergros/broke-5/spec/dlist_atom/core_spec.clj:59
+
+Finished in 0.01673 seconds
+21 examples, 1 failures
+WARNING: reverse already refers to: #'clojure.core/reverse in namespace: dlist-atom.core-spec, being replaced by: #'dlist-atom.core/reverse
+
+
+** Details for Index-backward returns positive numbers.
+
+.............F.......
+
+Failures:
+
+  1) index-backward should return an expected result
+     Expected: -1
+          got: 0 (using =)
+     /home/grader/quarry/dlist-atom-lab/gpergros/broke-6/spec/dlist_atom/core_spec.clj:73
+
+Finished in 0.00810 seconds
+21 examples, 1 failures
+WARNING: reverse already refers to: #'clojure.core/reverse in namespace: dlist-atom.core-spec, being replaced by: #'dlist-atom.core/reverse
+
+
+** Details for Index-backward off by one
+
+.............F.......
+
+Failures:
+
+  1) index-backward should return an expected result
+     Expected: -1
+          got: 0 (using =)
+     /home/grader/quarry/dlist-atom-lab/gpergros/broke-7/spec/dlist_atom/core_spec.clj:73
+
+Finished in 0.00817 seconds
+21 examples, 1 failures
+WARNING: reverse already refers to: #'clojure.core/reverse in namespace: dlist-atom.core-spec, being replaced by: #'dlist-atom.core/reverse
+
+
+** Details for Delete assumes list is sorted
+
+.................FF..
+
+Failures:
+
+  1) delete should only delete one
+     Expected: 5
+          got: 6 (using =)
+     /home/grader/quarry/dlist-atom-lab/gpergros/broke-8/spec/dlist_atom/core_spec.clj:87
+
+  2) delete should reduce the size when it finds the element
+     Expected: 4
+          got: 5 (using =)
+     /home/grader/quarry/dlist-atom-lab/gpergros/broke-8/spec/dlist_atom/core_spec.clj:92
+
+Finished in 0.01289 seconds
+21 examples, 2 failures
+WARNING: reverse already refers to: #'clojure.core/reverse in namespace: dlist-atom.core-spec, being replaced by: #'dlist-atom.core/reverse
+
+
+** Details for Reverse doesn't fix the back edges.
+
+....................F
+
+Failures:
+
+  1) reverse should reverse the whole list
+     Expected: (5 4 3 2 1)
+          got: (5) (using =)
+     /home/grader/quarry/dlist-atom-lab/gpergros/broke-9/spec/dlist_atom/core_spec.clj:105
+
+Finished in 0.03321 seconds
+21 examples, 1 failures
+WARNING: reverse already refers to: #'clojure.core/reverse in namespace: dlist-atom.core-spec, being replaced by: #'dlist-atom.core/reverse
+
+
+** Details for List to Dlist messes up pointers.
+
+.....F.F.F......FFFFF
+
+Failures:
+
+  1) insert-front should make the first element n
+     Expected: (1337 5 9 31)
+          got: (1337 31 9 5) (using =)
+     /home/grader/quarry/dlist-atom-lab/gpergros/broke-10/spec/dlist_atom/core_spec.clj:32
+
+  2) insert-last should make the last element n
+     Expected: (5 9 31 1337)
+          got: (31 9 5 1337) (using =)
+     /home/grader/quarry/dlist-atom-lab/gpergros/broke-10/spec/dlist_atom/core_spec.clj:42
+
+  3) insert-sorted should maintain sorting
+     Expected: (1 2 4 8 12 16)
+          got: (12 16 8 4 2 1) (using =)
+     /home/grader/quarry/dlist-atom-lab/gpergros/broke-10/spec/dlist_atom/core_spec.clj:52
+
+  4) list-to-dlist should be in the same order
+     Expected: (1 7 2 13 9)
+          got: (9 13 2 7 1) (using =)
+     /home/grader/quarry/dlist-atom-lab/gpergros/broke-10/spec/dlist_atom/core_spec.clj:81
+
+  5) delete should only delete one
+     Expected: (1 2 3 4 5)
+          got: (5 4 3 2 1) (using =)
+     /home/grader/quarry/dlist-atom-lab/gpergros/broke-10/spec/dlist_atom/core_spec.clj:88
+
+  6) delete should reduce the size when it finds the element
+     Expected: (1 2 4 5)
+          got: (5 4 2 1) (using =)
+     /home/grader/quarry/dlist-atom-lab/gpergros/broke-10/spec/dlist_atom/core_spec.clj:93
+
+  7) delete should not delete anything if the element isn't there
+     Expected: (1 2 4 5)
+          got: (5 4 2 1) (using =)
+     /home/grader/quarry/dlist-atom-lab/gpergros/broke-10/spec/dlist_atom/core_spec.clj:98
+
+  8) reverse should reverse the whole list
+     Expected: (5 4 3 2 1)
+          got: (1 2 3 4 5) (using =)
+     /home/grader/quarry/dlist-atom-lab/gpergros/broke-10/spec/dlist_atom/core_spec.clj:105
+
+Finished in 0.03721 seconds
+21 examples, 8 failures
+WARNING: reverse already refers to: #'clojure.core/reverse in namespace: dlist-atom.core-spec, being replaced by: #'dlist-atom.core/reverse

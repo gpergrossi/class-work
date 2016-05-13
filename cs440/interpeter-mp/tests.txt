@@ -1,0 +1,31 @@
+I have completed all of the undefined functions except for exec CallStmt because I don't think
+call fn(1,2,etc.); is valid syntax. What exactly should it do? Print the result? Functions can
+only have an expression as a body, not a statement, so there can't be any side-effects.
+
+Tests:
+
+>a := 100;
+>print a;
+100
+
+>mul := fn[a,b] a*b end;
+>print call mul(a,20);
+2000
+
+>print if a-a==a*(1-1) then 11 else 0 fi;
+111
+
+>load "script";
+>print a;
+1
+>print z;
+26
+
+>fact := fn[n] if n < 2 then 1 else n*(call self(n-1)) fi end;
+>print call fact(4);
+24
+
+>print (true and false);
+False
+>print (true or false);
+True

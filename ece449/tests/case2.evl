@@ -1,0 +1,18 @@
+// a comment
+module top;
+
+  wire one;
+  wire [2:0] feed;
+  wire out;
+
+  evl_one(one);
+
+  not A(feed[1],feed[0]);
+  not B(feed[2],feed[1]);
+  not C(out,feed[2]);
+
+  evl_dff(feed[0], out, one);
+
+  evl_output sim_out(one, feed, out);
+
+endmodule

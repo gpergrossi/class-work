@@ -1,0 +1,27 @@
+// 10-bit Linear Feedback Shift Register
+
+module lfsr;
+
+  wire [9:0] s;
+  wire nx, x;
+
+  evl_output sim_out(s, s[9], s[8], s[7], s[6], s[5], s[4], s[3], s[2], s[1], s[0]);
+  
+  wire clk;
+  evl_clock(clk);
+
+  evl_dff(s[0], x, clk);
+  evl_dff(s[1], s[0], clk);
+  evl_dff(s[2], s[1], clk);
+  evl_dff(s[3], s[2], clk);
+  evl_dff(s[4], s[3], clk);
+  evl_dff(s[5], s[4], clk);
+  evl_dff(s[6], s[5], clk);
+  evl_dff(s[7], s[6], clk);
+  evl_dff(s[8], s[7], clk);
+  evl_dff(s[9], s[8], clk);
+  
+  xor(nx, s[9], s[6]);
+  not(x, nx);
+  
+endmodule

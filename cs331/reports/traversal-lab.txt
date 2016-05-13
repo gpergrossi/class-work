@@ -1,0 +1,259 @@
+Lab report for Traversal Lab - gpergros
+Timestamp: 2013-11-22 11:52:07
+
+|  :scenario |                                            :title |                              :result | :score |
+|------------+---------------------------------------------------+--------------------------------------+--------|
+|    working |             Test student code vs instructor tests |                                 Fail |      0 |
+| qualifying |             Test student tests vs instructor code |                                 Fail |      0 |
+|    broke-1 |                    Preorder swaps left and right. | Pass: Student tests detected errors. |      5 |
+|    broke-2 |                          Preorder drops elements. | Pass: Student tests detected errors. |      5 |
+|    broke-3 |                          Postorder does preorder. | Pass: Student tests detected errors. |      5 |
+|    broke-4 |                   Postorder swaps left and right. | Pass: Student tests detected errors. |      5 |
+|    broke-5 |                                Inorder backwards. | Pass: Student tests detected errors. |      5 |
+|    broke-6 |                            Inorder does preorder. | Pass: Student tests detected errors. |      5 |
+|    broke-7 |                Level order does right side twice. | Pass: Student tests detected errors. |      5 |
+|    broke-8 |                           Level order omits root. | Pass: Student tests detected errors. |      5 |
+|    broke-9 |                Frontier includes one-child nodes. | Pass: Student tests detected errors. |      5 |
+|   broke-10 | Frontier omits leaves instead of everything else. | Pass: Student tests detected errors. |      5 |
+|      total |                                       Total Score |                                      |     50 |
+
+Details:
+
+
+** Details for Test student code vs instructor tests
+
+FFFFFFFFFFFFFFF
+
+Failures:
+
+  1) Preorder traversals returns empty for empty trees.
+     Expected: ()
+          got: nil (using =)
+     /home/grader/quarry/traversal-lab/gpergros/running/spec/traversals/core_spec.clj:17
+
+  2) Preorder traversals works for balanced trees.
+     Expected: (4 2 1 3 6 5 7)
+          got: nil (using =)
+     /home/grader/quarry/traversal-lab/gpergros/running/spec/traversals/core_spec.clj:19
+
+  3) Preorder traversals works for spindly trees.
+     Expected: (7 4 3 1 2 6 5 10 9 8 11 12 13)
+          got: nil (using =)
+     /home/grader/quarry/traversal-lab/gpergros/running/spec/traversals/core_spec.clj:21
+
+  4) Postorder traversals returns empty for empty trees.
+     Expected: ()
+          got: nil (using =)
+     /home/grader/quarry/traversal-lab/gpergros/running/spec/traversals/core_spec.clj:25
+
+  5) Postorder traversals works for balanced trees.
+     Expected: (1 3 2 5 7 6 4)
+          got: nil (using =)
+     /home/grader/quarry/traversal-lab/gpergros/running/spec/traversals/core_spec.clj:27
+
+  6) Postorder traversals works for spindly trees.
+     Expected: (2 1 3 5 6 4 8 9 13 12 11 10 7)
+          got: nil (using =)
+     /home/grader/quarry/traversal-lab/gpergros/running/spec/traversals/core_spec.clj:29
+
+  7) Inorder traversals returns empty for empty trees.
+     Expected: ()
+          got: nil (using =)
+     /home/grader/quarry/traversal-lab/gpergros/running/spec/traversals/core_spec.clj:33
+
+  8) Inorder traversals works for balanced trees.
+     Expected: (1 2 3 4 5 6 7)
+          got: nil (using =)
+     /home/grader/quarry/traversal-lab/gpergros/running/spec/traversals/core_spec.clj:35
+
+  9) Inorder traversals works for spindly trees.
+     Expected: (1 2 3 4 5 6 7 8 9 10 11 12 13)
+          got: nil (using =)
+     /home/grader/quarry/traversal-lab/gpergros/running/spec/traversals/core_spec.clj:37
+
+  10) Levelorder traversals returns empty for empty trees.
+     Expected: ()
+          got: nil (using =)
+     /home/grader/quarry/traversal-lab/gpergros/running/spec/traversals/core_spec.clj:41
+
+  11) Levelorder traversals works for balanced trees.
+     Expected: (4 2 6 1 3 5 7)
+          got: nil (using =)
+     /home/grader/quarry/traversal-lab/gpergros/running/spec/traversals/core_spec.clj:43
+
+  12) Levelorder traversals works for spindly trees.
+     Expected: (7 4 10 3 6 9 11 1 5 8 12 2 13)
+          got: nil (using =)
+     /home/grader/quarry/traversal-lab/gpergros/running/spec/traversals/core_spec.clj:45
+
+  13) Frontier traversals returns empty for empty trees.
+     Expected: ()
+          got: nil (using =)
+     /home/grader/quarry/traversal-lab/gpergros/running/spec/traversals/core_spec.clj:49
+
+  14) Frontier traversals works for balanced trees.
+     Expected: (1 3 5 7)
+          got: nil (using =)
+     /home/grader/quarry/traversal-lab/gpergros/running/spec/traversals/core_spec.clj:51
+
+  15) Frontier traversals works for spindly trees.
+     Expected: (2 5 8 13)
+          got: nil (using =)
+     /home/grader/quarry/traversal-lab/gpergros/running/spec/traversals/core_spec.clj:53
+
+Finished in 0.11234 seconds
+15 examples, 15 failures
+
+
+** Details for Test student tests vs instructor code
+
+F
+
+Failures:
+
+  1) The spec file should have some tests.
+     Expected truthy but was: false
+     /home/grader/quarry/traversal-lab/gpergros/running/spec/traversals/core_spec.clj:14
+
+Finished in 0.00158 seconds
+1 examples, 1 failures
+
+
+** Details for Preorder swaps left and right.
+
+F
+
+Failures:
+
+  1) The spec file should have some tests.
+     Expected truthy but was: false
+     /home/grader/quarry/traversal-lab/gpergros/running/spec/traversals/core_spec.clj:14
+
+Finished in 0.00963 seconds
+1 examples, 1 failures
+
+
+** Details for Preorder drops elements.
+
+F
+
+Failures:
+
+  1) The spec file should have some tests.
+     Expected truthy but was: false
+     /home/grader/quarry/traversal-lab/gpergros/running/spec/traversals/core_spec.clj:14
+
+Finished in 0.00165 seconds
+1 examples, 1 failures
+
+
+** Details for Postorder does preorder.
+
+F
+
+Failures:
+
+  1) The spec file should have some tests.
+     Expected truthy but was: false
+     /home/grader/quarry/traversal-lab/gpergros/running/spec/traversals/core_spec.clj:14
+
+Finished in 0.00538 seconds
+1 examples, 1 failures
+
+
+** Details for Postorder swaps left and right.
+
+F
+
+Failures:
+
+  1) The spec file should have some tests.
+     Expected truthy but was: false
+     /home/grader/quarry/traversal-lab/gpergros/running/spec/traversals/core_spec.clj:14
+
+Finished in 0.00588 seconds
+1 examples, 1 failures
+
+
+** Details for Inorder backwards.
+
+F
+
+Failures:
+
+  1) The spec file should have some tests.
+     Expected truthy but was: false
+     /home/grader/quarry/traversal-lab/gpergros/running/spec/traversals/core_spec.clj:14
+
+Finished in 0.00953 seconds
+1 examples, 1 failures
+
+
+** Details for Inorder does preorder.
+
+F
+
+Failures:
+
+  1) The spec file should have some tests.
+     Expected truthy but was: false
+     /home/grader/quarry/traversal-lab/gpergros/running/spec/traversals/core_spec.clj:14
+
+Finished in 0.00138 seconds
+1 examples, 1 failures
+
+
+** Details for Level order does right side twice.
+
+F
+
+Failures:
+
+  1) The spec file should have some tests.
+     Expected truthy but was: false
+     /home/grader/quarry/traversal-lab/gpergros/running/spec/traversals/core_spec.clj:14
+
+Finished in 0.00366 seconds
+1 examples, 1 failures
+
+
+** Details for Level order omits root.
+
+F
+
+Failures:
+
+  1) The spec file should have some tests.
+     Expected truthy but was: false
+     /home/grader/quarry/traversal-lab/gpergros/running/spec/traversals/core_spec.clj:14
+
+Finished in 0.01055 seconds
+1 examples, 1 failures
+
+
+** Details for Frontier includes one-child nodes.
+
+F
+
+Failures:
+
+  1) The spec file should have some tests.
+     Expected truthy but was: false
+     /home/grader/quarry/traversal-lab/gpergros/running/spec/traversals/core_spec.clj:14
+
+Finished in 0.00949 seconds
+1 examples, 1 failures
+
+
+** Details for Frontier omits leaves instead of everything else.
+
+F
+
+Failures:
+
+  1) The spec file should have some tests.
+     Expected truthy but was: false
+     /home/grader/quarry/traversal-lab/gpergros/running/spec/traversals/core_spec.clj:14
+
+Finished in 0.01048 seconds
+1 examples, 1 failures

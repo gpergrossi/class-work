@@ -1,0 +1,14 @@
+// A simple combinational circuit without using buses.
+
+module top;
+
+  wire a, b, c;
+
+  evl_zero(a);
+  evl_one(b);
+  
+  and(c, a, b);
+
+  evl_output sim_out(c, a, b);
+
+endmodule

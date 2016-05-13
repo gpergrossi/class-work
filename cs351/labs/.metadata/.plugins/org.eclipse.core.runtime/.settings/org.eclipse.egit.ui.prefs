@@ -1,0 +1,2 @@
+commit_dialog_history_messages=<?xml version\="1.0" encoding\="UTF-8"?>\r\n<messages>\r\n<message>Running 88/100. Slow on randoms. Poor util on binaries and reallocs.</message>\r\n<message>Everything is working (total score 79/100)</message>\r\n<message>All tests working, slowly. (Needs block splitting)</message>\r\n<message>Added function find_block&\#x0A;Added function make_block</message>\r\n</messages>
+eclipse.preferences.version=1

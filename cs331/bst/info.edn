@@ -1,0 +1,19 @@
+{:semester "2013-08"
+ :rubric "cs331"
+ :title "BST Lab"
+ :slug "bst-lab"
+ :dir "bst"
+ :uri "git@bitbucket.org:mattoxbeckman/clojure-bst-lab.git"
+ :active false
+ :scenarios [ {:kind "working" :branch "master" :slug "working" :title "Test student code vs instructor tests" :points 45}
+              {:kind "qualifying" :branch "master" :slug "qualifying" :title "Test student tests vs instructor code" :points 5}
+              {:kind "broken" :branch "broke-1" :slug "broke-1" :title "" :points 5}
+              {:kind "broken" :branch "broke-2" :slug "broke-2" :title "" :points 5}
+              {:kind "broken" :branch "broke-3" :slug "broke-3" :title "" :points 5}
+              {:kind "broken" :branch "broke-4" :slug "broke-4" :title "" :points 5}
+              {:kind "broken" :branch "broke-5" :slug "broke-5" :title "" :points 5}
+              {:kind "broken" :branch "broke-6" :slug "broke-6" :title "" :points 5}
+              {:kind "broken" :branch "broke-7" :slug "broke-7" :title "" :points 5}
+              {:kind "broken" :branch "broke-8" :slug "broke-8" :title "" :points 5}
+              {:kind "broken" :branch "broke-9" :slug "broke-9" :title "" :points 5}
+              {:kind "broken" :branch "broke-10" :slug "broke-10" :title "" :points 5}]}

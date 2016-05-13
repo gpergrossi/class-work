@@ -1,0 +1,10 @@
+ls_out.txt
+Makefile
+new.txt
+sdriver.pl
+trace01.txt
+trace02.txt
+trace03.txt
+trace04.txt
+tsh
+tsh.c

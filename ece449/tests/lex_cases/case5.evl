@@ -1,0 +1,7 @@
+// a comment
+module _top123; // All one name
+  wire   s0,    s1,    clk;
+	// wire s0 s1 clk;
+// not(s1, s0);
+//endmodule
+endmodule // end

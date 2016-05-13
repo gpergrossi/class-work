@@ -1,0 +1,9 @@
+module top;
+
+    wire a;
+    wire [15:0] b;
+
+    evl_input sim_in(a, b);
+    evl_output sim_out(a, b);
+
+endmodule

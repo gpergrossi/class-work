@@ -1,0 +1,45 @@
+I ran each solution type with 10 philosophers, 200 meals each.
+I repeated the simulations 100 times but forgot to reset the
+random number generators for the philosophers. In effect, each
+philosopher ate 20,000 meals. I could not fix the RNGs because
+the ful simulation took a few hours. I believe the numbers are
+representative of the proportions I would get after applying
+a fix for the RNGs.
+
+The solution times are as follows
+1. Footman solution, average time:	63.302s
+2. Left-handed solution, average time:	47.023s
+3. Tanenbaum's solution, average time:	35.295s
+
+I expected the footman solution to be a slow because it only
+guarantees a single spare fork at the table. I assumed this
+would result in the philosophers more or less taking turns
+eating one at a time. To test this, I added a semaphore-
+protected counter that each philosopher would increment before
+eating and decrement after. This could slightly affect the
+solution speed because it requires new eaters to go through a
+turnstile, but the results are interesting; with the footman
+counter in place, I saw that 2, somtimes 3, and rarely 4 out of 10 
+philosophers were typically eating concurrently. That's more
+than I expected, but still the worst solution of the three.
+
+The left-handed solution seemed like it would be just as slow
+as the footman solution but the results show that it is a
+significant improvement. I was surprised by this and thought
+about what might cause it. Intuitively, it seems like the left
+handed philosopher might end up the only philosopher that eats,
+but because he must pick up his left fork first, the philosopher
+to his left will wait, making that philosopher's left fork also
+available. I believe that has a greater effect than I at first
+expected. It may also be significant that the lefty will release
+his left for first. With a concurrency counter turnstile in place,
+the measured concurrency is almost always 3 philosophers.
+
+It seemed obvious that Tanenbaum's solution would be the best 
+perfeormance. Assuming the thread scheduler doesn't become 
+strangely and omnisciently malicious, the number of philosophers
+eating at a time should always be close to half (maximum). I did
+not bother adding a concurrency counter to this solution, but with
+10 philosophers, I expect 4-5 of them were regularly eating. Any
+greater would be impossible, and any fewer would be almost the
+same result as the left-handed solution.

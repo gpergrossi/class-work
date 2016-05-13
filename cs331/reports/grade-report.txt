@@ -1,0 +1,27 @@
+Grade Report for Gregary M.   Pergrossi
+Produced 2013-12-11 10:06
+Netid: gpergros cwid: A20282984
+Course: cs331 (2013-08)  Section: 02
+
+                    Assignment   Status Raw Max    Norm Weight  Points 
+------------------------------ -------- --- --- ------- ------ ------- 
+                   Exam 1 (v1)      n/a   0  66   0.00% 0.0000  0.0000 
+                   Exam 1 (v2)   Graded  65  66  98.48% 0.2500 24.6212 
+                   Exam 2 (v1)      n/a   0 102   0.00% 0.0000  0.0000 
+                   Exam 2 (v2) Replaced  76 102  91.67% 0.2500 22.9167 
+               Final Exam (v1)      n/a   0 216   0.00% 0.0000  0.0000 
+               Final Exam (v2)   Graded 198 216  91.67% 0.2500 22.9167 
+               Linked List Lab   Graded 100 100 100.00% 0.0500  5.0000 
+               Stack Queue Lab   Graded 100 100 100.00% 0.0500  5.0000 
+        Doubly Linked List Lab   Graded  92 100  92.00% 0.0500  4.6000 
+                       BST Lab  Dropped  48 100  48.00% 0.0000  0.0000 
+                 Traversal Lab  Dropped  50 100  50.00% 0.0000  0.0000 
+              Clojure Activity   Graded   1   1 100.00% 0.0143  1.4286 
+               Record Activity   Graded   1   1 100.00% 0.0143  1.4286 
+            Recursion Activity   Graded   1   1 100.00% 0.0143  1.4286 
+      Immutable Lists Activity   Graded   1   1 100.00% 0.0143  1.4286 
+Reversing a Doubly Linked List   Graded   1   1 100.00% 0.0143  1.4286 
+                  List Zippers   Graded   1   1 100.00% 0.0143  1.4286 
+             Quadratic Sorting  Missing   0   1   0.00% 0.0143  0.0000 
+------------------------------ -------- --- --- ------- ------ ------- 
+                         Total                   93.63% 1.0000 93.6260 

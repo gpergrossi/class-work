@@ -1,0 +1,142 @@
+\documentclass[12pt]{article}
+\usepackage[letterpaper,margin=0.5in]{geometry}
+
+\usepackage{titlesec}
+\usepackage{xltxtra,fontspec,xunicode}
+
+\usepackage{minted}
+
+\usemintedstyle{trac}
+
+\defaultfontfeatures{Ligatures={TeX}}
+\newfontfamily\mytitlefont{Linux Biolinum}
+\newfontfamily\mytextfont{Linux Libertine}
+%\setmonofont[Scale=0.86]{Inconsolata}
+
+\titleformat{\chapter}{\mytitlefont\huge}{\chaptertitlename\ \thechapter}{20pt}{\Huge}
+\titleformat{\section}{\mytitlefont\Large}{\thesection}{1em}{}
+\titleformat{\subsection}{\mytitlefont\large\bfseries}{\thesubsection}{1em}{}
+\titleformat{\subsubsection}{\mytitlefont\normalsize\bfseries}{\thesubsubsection}{1em}{}
+\titleformat{\paragraph}[runin]{\mytextfont\normalsize\bfseries}{\theparagraph}{1em}{}
+
+\newminted{clojure}{linenos,numbersep=4pt}
+
+\begin{document}
+
+\def\title{Stack and Queue Lab}
+
+\hrule
+
+\mytitlefont
+
+\begin{center}
+\begin{Large}
+CS 331 --- \title
+\end{Large}
+\end{center}
+
+\mytextfont
+
+\hrule
+
+\vskip 1em
+
+\section{Introduction and Learning Objectives}
+
+\def\objectives{
+\begin{enumerate}
+   \item Implement a stack using persistent lists as a back-end.
+   \item Use two persistent lists to make an efficient persistent queue.
+   \item Use Speclj to test your code, and to catch errors in the Broken Solutions.
+\end{enumerate}
+}
+\objectives
+
+\section{Getting Started}
+
+Go to your repository and do a \texttt{git pull}.  You will find the
+directory \texttt{fifolifo}.
+
+In the \texttt{fifolifo} directory you will see the following folders:
+
+\begin{itemize}
+\item \texttt{docs} --- contains a file \texttt{uberdoc.html} containing the documentation from the
+  comments.  This is available online; follow the link called ``Marginalia Documentation''.
+  \emph{Marginalia} is the name of the program used to generate the documentation.
+\item \texttt{handout} --- this contains ths file \texttt{handout.tex}, which is the \LaTeX\ source
+  for the current document.
+\item \texttt{src/fifolifo} --- contains the file \texttt{core.clj}, which contains the
+  running code for the lab.
+\item \texttt{spec/fifolifo} --- contains the file \texttt{core\_spec.clj}, which
+  contains the test cases for the lab.
+\end{itemize}
+
+\section{Given Code}
+
+\subsection{The \texttt{fifolifo} Namespace}
+
+At the beginning of \texttt{core.clj}, you will see these lines:
+
+\begin{clojurecode}
+(ns fifolifo.core
+   (:refer-clojure :exclude [pop peek]))
+
+(defrecord Stack [top size])
+(defrecord Queue [front back size])
+\end{clojurecode}
+
+One thing that is new in this namespace is that we have the line
+\mint{clojure}|(:refer-clojure :exclude [pop peek])|.  This tells the compiler to not use the
+built-in versions of these functions, since we intend to replace them with our own.
+
+We will be using the built-in Clojure lists to handle the details of the stacks and the
+doubly-ended-queues, but we will also be using our own wrapper records around them.  This will
+allow us to test them more easily, and also allow us to keep track of the size without having
+to recompute it each time.
+
+\subsection{Test Cases}
+
+The file \texttt{spec/linked\_lists/core\_spec.clj} contains testing code.  It will be similar
+to the last one, except you will propbably want to make more describe forms than
+the three that are given.  The third one is just an ``autofail'' test so it's clear who didn't even
+attempt the lab.  Delete that one.
+
+\section{Your Work}
+
+Your job now is to write functions along with their corresponding tests.  We have left stub
+functions along with documentation in the source code.  
+
+The functions you have to write are as follows:
+
+\begin{itemize}
+\item \mint{clojure}|make-stack| 
+\item \mint{clojure}|stack-size|
+\item \mint{clojure}|push| 
+\item \mint{clojure}|pop|
+\item \mint{clojure}|top|
+\item \mint{clojure}|make-queue|
+\item \mint{clojure}|queue-size|
+\item \mint{clojure}|enqueue|
+\item \mint{clojure}|dequeue|
+\item \mint{clojure}|peek|
+\end{itemize}
+
+The tests will check to be sure memory was shared properly in the push, enqueue, pop, and dequeue functions.
+
+You may want to add your own function to handle the rotation of the back list to the front list.
+That is encouraged.  However, be sure not to write explicit test cases against it.  Since it's not
+part of the public specification, things will break when your code is combined with the solutions,
+and the script will assume that it is your problem, not ours.
+
+\subsection{Using Git}
+
+A repeat from the last lab:
+whenever you make significant changes to your code, it is a good idea to commit your work.
+One poor student deleted his \texttt{core.clj} file before doing any commits, and had to start over.
+If he had committed something, he could have just done \verb|git checkout core.clj| to recover the
+file.
+
+The grading script is fully operational now.  Expect these tests to start on Wednesday.
+
+\end{document}
+

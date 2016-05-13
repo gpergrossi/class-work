@@ -1,0 +1,12 @@
+// a comment
+module top;
+
+   wire s0, s1, clk;
+
+   evl_clock(clk);
+
+   evl_dff(s0, s1, clk);
+
+   not(s1, s0);
+
+endmodule

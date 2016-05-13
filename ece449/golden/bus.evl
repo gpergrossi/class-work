@@ -1,0 +1,15 @@
+// A simple combinational circuit using buses.
+
+module top;
+
+  wire [1:0] in;
+  wire out;
+
+  evl_zero(in[0]);
+  evl_one(in[1]);
+  
+  and(out, in[0], in[1]);
+
+  evl_output sim_out(out, in);
+
+endmodule

@@ -1,0 +1,15 @@
+// AND gate module
+module top;
+
+  wire [1:0] in;
+  wire [1:0] out;
+
+  evl_zero(in[0]);
+  evl_one(in[1]);
+
+  not(out[0], in[0]);
+  not(out[1], in[1]);
+
+  evl_output sim_out(out, in);
+
+endmodule

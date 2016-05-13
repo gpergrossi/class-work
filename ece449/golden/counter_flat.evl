@@ -1,0 +1,132 @@
+// 16-bit counter with set, flattened
+
+module counter;
+
+  // input/output
+
+  wire [15:0] a, in, s, mux_o;
+  wire set;
+
+  evl_input sim_in(set, in);
+  evl_output sim_out(a, s, in, set, mux_o);
+  
+  // states
+  wire clk;
+  evl_clock(clk);
+
+  evl_dff(a[0], mux_o[0], clk);
+  evl_dff(a[1], mux_o[1], clk);
+  evl_dff(a[2], mux_o[2], clk);
+  evl_dff(a[3], mux_o[3], clk);
+  evl_dff(a[4], mux_o[4], clk);
+  evl_dff(a[5], mux_o[5], clk);
+  evl_dff(a[6], mux_o[6], clk);
+  evl_dff(a[7], mux_o[7], clk);
+  evl_dff(a[8], mux_o[8], clk);
+  evl_dff(a[9], mux_o[9], clk);
+  evl_dff(a[10], mux_o[10], clk);
+  evl_dff(a[11], mux_o[11], clk);
+  evl_dff(a[12], mux_o[12], clk);
+  evl_dff(a[13], mux_o[13], clk);
+  evl_dff(a[14], mux_o[14], clk);
+  evl_dff(a[15], mux_o[15], clk);
+       
+  // compute s=a+1
+  
+  wire [16:0] ci;
+  
+  evl_one(ci[0]);
+  
+  xor(s[0], a[0], ci[0]);
+  xor(s[1], a[1], ci[1]);
+  xor(s[2], a[2], ci[2]);
+  xor(s[3], a[3], ci[3]);
+  xor(s[4], a[4], ci[4]);
+  xor(s[5], a[5], ci[5]);
+  xor(s[6], a[6], ci[6]);
+  xor(s[7], a[7], ci[7]);
+  xor(s[8], a[8], ci[8]);
+  xor(s[9], a[9], ci[9]);
+  xor(s[10], a[10], ci[10]);
+  xor(s[11], a[11], ci[11]);
+  xor(s[12], a[12], ci[12]);
+  xor(s[13], a[13], ci[13]);
+  xor(s[14], a[14], ci[14]);
+  xor(s[15], a[15], ci[15]);
+
+  and(ci[1], a[0], ci[0]);
+  and(ci[2], a[1], ci[1]);
+  and(ci[3], a[2], ci[2]);
+  and(ci[4], a[3], ci[3]);
+  and(ci[5], a[4], ci[4]);
+  and(ci[6], a[5], ci[5]);
+  and(ci[7], a[6], ci[6]);
+  and(ci[8], a[7], ci[7]);
+  and(ci[9], a[8], ci[8]);
+  and(ci[10], a[9], ci[9]);
+  and(ci[11], a[10], ci[10]);
+  and(ci[12], a[11], ci[11]);
+  and(ci[13], a[12], ci[12]);
+  and(ci[14], a[13], ci[13]);
+  and(ci[15], a[14], ci[14]);
+  and(ci[16], a[15], ci[15]);
+    
+  // choose between s and in using set
+  
+  wire nset;
+  wire [15:0] nsa, sin;
+  
+  not(nset, set);
+  
+  and(nsa[0], nset, s[0]);
+  and(nsa[1], nset, s[1]);
+  and(nsa[2], nset, s[2]);
+  and(nsa[3], nset, s[3]);
+  and(nsa[4], nset, s[4]);
+  and(nsa[5], nset, s[5]);
+  and(nsa[6], nset, s[6]);
+  and(nsa[7], nset, s[7]);
+  and(nsa[8], nset, s[8]);
+  and(nsa[9], nset, s[9]);
+  and(nsa[10], nset, s[10]);
+  and(nsa[11], nset, s[11]);
+  and(nsa[12], nset, s[12]);
+  and(nsa[13], nset, s[13]);
+  and(nsa[14], nset, s[14]);
+  and(nsa[15], nset, s[15]);
+    
+  and(sin[0], set, in[0]);
+  and(sin[1], set, in[1]);
+  and(sin[2], set, in[2]);
+  and(sin[3], set, in[3]);
+  and(sin[4], set, in[4]);
+  and(sin[5], set, in[5]);
+  and(sin[6], set, in[6]);
+  and(sin[7], set, in[7]);
+  and(sin[8], set, in[8]);
+  and(sin[9], set, in[9]);
+  and(sin[10], set, in[10]);
+  and(sin[11], set, in[11]);
+  and(sin[12], set, in[12]);
+  and(sin[13], set, in[13]);
+  and(sin[14], set, in[14]);
+  and(sin[15], set, in[15]);
+    
+  or(mux_o[0], nsa[0], sin[0]);
+  or(mux_o[1], nsa[1], sin[1]);
+  or(mux_o[2], nsa[2], sin[2]);
+  or(mux_o[3], nsa[3], sin[3]);
+  or(mux_o[4], nsa[4], sin[4]);
+  or(mux_o[5], nsa[5], sin[5]);
+  or(mux_o[6], nsa[6], sin[6]);
+  or(mux_o[7], nsa[7], sin[7]);
+  or(mux_o[8], nsa[8], sin[8]);
+  or(mux_o[9], nsa[9], sin[9]);
+  or(mux_o[10], nsa[10], sin[10]);
+  or(mux_o[11], nsa[11], sin[11]);
+  or(mux_o[12], nsa[12], sin[12]);
+  or(mux_o[13], nsa[13], sin[13]);
+  or(mux_o[14], nsa[14], sin[14]);
+  or(mux_o[15], nsa[15], sin[15]);
+    
+endmodule // counter

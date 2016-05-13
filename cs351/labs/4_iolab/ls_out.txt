@@ -1,0 +1,10 @@
+total 76
+-rw-r--r--. 1 gpergros stud        0 Nov  5 23:36 ls_out.txt
+-rw-r--r--. 1 gpergros cs351ta   840 Sep  8 17:57 Makefile
+-rwxr-xr-x. 1 gpergros cs351ta  5143 Sep  8 17:57 sdriver.pl
+-rw-r--r--. 1 gpergros cs351ta   289 Sep  8 17:57 trace01.txt
+-rw-r--r--. 1 gpergros cs351ta   326 Sep  8 17:57 trace02.txt
+-rw-r--r--. 1 gpergros cs351ta   169 Sep  8 17:57 trace03.txt
+-rw-r--r--. 1 gpergros cs351ta   225 Sep  8 17:57 trace04.txt
+-rwxr-xr-x. 1 gpergros stud    27551 Nov  5 23:35 tsh
+-rw-r--r--. 1 gpergros cs351ta 19506 Nov  5 23:35 tsh.c

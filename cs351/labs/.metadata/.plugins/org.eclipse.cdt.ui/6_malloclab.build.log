@@ -1,0 +1,7 @@
+08:46:09 **** Incremental Build of configuration Default for project 6_malloclab ****
+make 
+gcc -Wall -Werror -g   -c -o mm.o mm.c
+gcc -Wall -Werror -g -o mdriver mdriver.o mm.o memlib.o fsecs.o fcyc.o clock.o ftimer.o
+
+08:46:10 Build Finished (took 1s.160ms)
+

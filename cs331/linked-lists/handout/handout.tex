@@ -1,0 +1,321 @@
+\documentclass[12pt]{article}
+\usepackage[letterpaper,margin=0.5in]{geometry}
+
+\usepackage{titlesec}
+\usepackage{xltxtra,fontspec,xunicode}
+
+\usepackage{minted}
+
+\usemintedstyle{trac}
+
+\defaultfontfeatures{Ligatures={TeX}}
+\newfontfamily\mytitlefont{Linux Biolinum}
+\newfontfamily\mytextfont{Linux Libertine}
+%\setmonofont[Scale=0.86]{Inconsolata}
+
+\titleformat{\chapter}{\mytitlefont\huge}{\chaptertitlename\ \thechapter}{20pt}{\Huge}
+\titleformat{\section}{\mytitlefont\Large}{\thesection}{1em}{}
+\titleformat{\subsection}{\mytitlefont\large\bfseries}{\thesubsection}{1em}{}
+\titleformat{\subsubsection}{\mytitlefont\normalsize\bfseries}{\thesubsubsection}{1em}{}
+\titleformat{\paragraph}[runin]{\mytextfont\normalsize\bfseries}{\theparagraph}{1em}{}
+
+\newminted{clojure}{linenos,numbersep=4pt}
+
+\begin{document}
+
+\def\title{Immutable Linked Lists Lab}
+
+\hrule
+
+\mytitlefont
+
+\begin{center}
+\begin{Large}
+CS 331 --- \title
+\end{Large}
+\end{center}
+
+\mytextfont
+
+\hrule
+
+\vskip 1em
+
+\section{Introduction and Learning Objectives}
+
+In this lab you will create a simple linked list.  Since it is your
+first real lab, you will only write a few functions.
+
+Your learning objectives for this lab are:
+
+\def\objectives{
+\begin{enumerate}
+   \item Use a Clojure record to construct the add, find, and delete functions.
+   \item Use Speclj to test your code, and to catch errors in the
+     Broken Solutions.
+   \item Use git to properly hand in your assignment.
+\end{enumerate}
+}
+\objectives
+
+\section{Getting Started}
+
+Go to your repository and do a \texttt{git pull}.  You will find the
+directory \texttt{linked-lists}.
+
+The structure of a Clojure project is somewhat complex, but you will
+learn it quickly.  Enter the \texttt{linked-lists} directory, and you
+will see the following folders:
+
+\begin{itemize}
+\item \texttt{docs} --- contains a file \texttt{uberdoc.html} containing the documentation from the
+  comments.  This is available online; follow the link called ``Marginalia Documentation''.
+  \emph{Marginalia} is the name of the program used to generate the documentation.
+\item \texttt{handout} --- this contains ths file \texttt{handout.tex}, which is the \LaTeX\ source
+  for the current document. 
+\item \texttt{src/linked\_lists} --- contains the file \texttt{core.clj}, which contains the running
+  code for the lab. 
+\item \texttt{spec/linked\_lists} --- contains the file \texttt{core\_spec.clj}, which contains the
+  test cases for the lab.
+\end{itemize}
+
+\section{Given Code}
+
+\subsection{The Linked List Namespace}
+
+At the beginning of \texttt{core.clj}, you will see these lines:
+
+\begin{clojurecode}
+(ns linked_lists.core)
+
+(defrecord Cons [car cdr])
+
+(defn insert-at-beginning 
+  "Create a new Cons with element `elt` and list `xx`."
+  [elt xx]
+  (Cons. elt xx))
+\end{clojurecode}
+
+The first line declares a \texttt{namespace}.  All the definitions in this file will be active for
+the \texttt{linked\_list.core} namespace.  In many languages, this is called a \emph{module}.  This
+allows for different programs to declare variables and functions without having to worry that they
+are already defined in another namespace.  It's like a family name; the Kim family and the Wang
+family family can both have a child name Ramit without having to worry about confusing people.
+Well, people will be confused as to why a Korean family and a Chinese family both gave an Indian
+name to their child, but within the Kim family, nobody will expect you to be referring to the child
+in the Wang family if you call the name Ramit.
+
+There are ways to override the current namespace when necessary; we'll talk about that in a moment.
+
+The second line is our actual record type.  The record is named \texttt{Cons}, and has two accessors 
+\texttt{:car} and \texttt{:cdr}.  These names are historical.  The name \texttt{:car} represents the
+first part of a pair, in which we will put the data part of our linked list.  The name stands for
+``contents of address register,'' which is how the first implementation of \textsc{Lisp} implemented
+lists.  Similarly, \texttt{:cdr} represents the second part of a pair, in which we will usually put
+a pointer to the remainder of the list.  This is the ``link'' part of the linked list.  The name
+stands for ``contents of decrement register.''
+
+Finally, we have a function definition.  The name of the function is \texttt{insert-at-beginning}.
+The next line is called a \emph{documentation string}.  Your editor can usually bring up the
+documentation string of a function.  In emacs, the key sequence is \texttt{C-c C-d}.  The parameters
+of the function are \texttt{elt} and \texttt{xx}.  Finally, the body of the function is
+\texttt{(Cons. elt xx)}.  Notice you have to put a period at the end of \texttt{Cons}.  This is
+because \texttt{defrecord} is creating a Java class, and the period tells Clojure that instantiating
+a Java class is what you intend.
+
+Now: truth in advertising.  The actual file you have will have a bunch of comments interspersed.
+Comments begin with a semicolon in Clojure (and in all Lisps).  By convention, block comments begin
+with two semicolons, and inline comments begin with one.  Also, the body of the function that you
+are given just has \texttt{nil} there.  You can type in the code to the function.
+
+A function written this way is called a \emph{stub function}.  It is good practice to write the stub
+functions you think you will need when you first start your program.  Some people raise an exception
+instead of returning \texttt{nil}.  The stub functions serve as place-holders, and also enable you
+to start writing test cases right away.
+
+\subsection{Test Cases}
+
+The file \texttt{spec/linked\_lists/core\_spec.clj} contains testing code.  Let's look at some of
+it.
+
+The file begins with this declaration:
+
+\begin{clojurecode}
+(ns linked_lists.core-spec
+  (:require [speclj.core :refer :all]
+            [linked_lists.core :refer :all])
+  (:import [linked_lists.core Cons]))
+\end{clojurecode}
+
+It created a new namespace.  The \texttt{require} code tells it that all the functions in the
+\texttt{speclj.core} (our testing framework) and \texttt{linked\_lists.core} (our program)
+namespaces should be available in the current namespace.  The \texttt{import} line is necessary
+since \texttt{Cons} is declared as a Java class, not as a Clojure function.  In this class, you will
+usually be given the namespace declarations, so don't worry if this is a bit fuzzy.
+
+The first test describes the behavior of the \texttt{Cons.} record.  The main macro is called
+\texttt{describe}, and you should have one of these for every function (or unit of functionality)
+within your program.  Inside the \texttt{describe} form will be multiple \texttt{it} clauses that
+describe one aspect of the behavior of what you're testing.  Finally, the body of the \texttt{it}
+clause contains one or more  \texttt{should} clauses.
+
+\begin{clojurecode}
+(describe "The record declaration"
+          (it "should create something"
+              (should (Cons. 10 20)))
+
+          (it "should have a car"
+              (should= 10 (:car (Cons. 10 20))))
+
+          (it "should have a cdr"
+              (should= 20 (:cdr (Cons. 10 20))))
+
+          (it "should be chainable"
+              (should= 40 (-> (Cons. 10 (Cons. 20 (Cons. 30 40))) :cdr :cdr :cdr))))
+\end{clojurecode}
+
+There are many variations of \texttt{should}.  The \texttt{should} version succeeds if the argument
+is true.  There is a \texttt{should-not} that succeeds when the argument is false.  The one you will
+likely use most is \texttt{should=}, which takes two arguments.  The first is the expected value,
+and the second is the code you want tested.  There are other \texttt{should} forms as well; the
+Speclj documentation has a complete list.
+
+Here is another test case.
+
+\begin{clojurecode}
+(describe "insert-at-beginning"
+          (it "creates a cons cell"
+              (should-not= nil (insert-at-beginning 10 nil)))
+
+          (it "should work with empty lists"
+              (should= (Cons. 10 nil) (insert-at-beginning 10 nil) ))
+          
+          (it "should work with lists that have data"
+              (let [xx (Cons. 10 (Cons. 20 (Cons. 30 nil)))]
+                (should= (Cons. 5 xx) (insert-at-beginning 5 xx) ))))
+\end{clojurecode}
+
+Notice the third \texttt{it} clause.  It uses a \texttt{let} to create a value we can refer to
+again.
+
+Finally, here is a stub test.
+
+\begin{clojurecode}
+(describe "insert-at-end"
+          (it "never had a test case."
+              (should nil))
+)
+\end{clojurecode}
+
+\section{A diversion...}
+
+You may have noticed another directory, \texttt{test-example}, in your repository.  It contains a
+very cut down version of the lab.  The reason it's there is so you can practice compiling and
+testing. 
+
+To try it out, go to the \texttt{test-example} directory.  The layout is similar to the original lab.
+Take a look at the code to see what we've included.
+
+To run a test, you will type \texttt{lein spec} from inside the \texttt{test-example} project.  The
+result should look something like this:
+
+\begin{verbatim}
+$ lein spec
+....FFF
+
+Failures:
+
+  1) insert-at-beginning creates a cons cell
+     Expected: nil
+     not to =: nil
+     /home/mattox/class/2013-08/cs331/labs/linked-lists/spec/linked_lists/core_spec.clj:27
+
+  2) insert-at-beginning should work with empty lists
+     Expected: <#linked_lists.core.Cons{:car 10, :cdr nil}>
+          got: nil (using =)
+     /home/mattox/class/2013-08/cs331/labs/linked-lists/spec/linked_lists/core_spec.clj:30
+
+  3) insert-at-beginning should work with lists that have data
+     Expected: <#linked_lists.core.Cons{:car 5, :cdr #linked_lists.core.Cons{:car 10, :cdr #linked_lists.core.Cons{:car 20, :cdr #linked_lists.core.Cons{:car 30, :cdr nil}}}}>
+          got: nil (using =)
+     /home/mattox/class/2013-08/cs331/labs/linked-lists/spec/linked_lists/core_spec.clj:34
+
+Finished in 0.02344 seconds
+7 examples, 3 failures
+\end{verbatim}
+
+The first line is a quick summary of what happened: the dots are passing tests, the ``F's'' are
+failed tests.  If there are failures, the details are spelled out.  In this case, there were three
+failures.  As you can see, the code was expecting some \texttt{Cons} cells to be created, but we got
+\texttt{nil} instead.  Looking at the source code, you will conclude that this is most likely
+because the \texttt{insert-at-beginning} function only returns \texttt{nil}.
+
+Fix it.  If you get stuck just replace the \texttt{nil} with 
+
+\begin{clojurecode}
+(Cons. elt xx)
+\end{clojurecode}
+
+Next, try running \texttt{lein spec} again.  You should now see something like this:
+
+\begin{verbatim}
+$ lein spec
+.......
+
+Finished in 0.00159 seconds
+7 examples, 0 failures
+\end{verbatim}
+
+If you understood what was happening here, you can now go back to the real lab, which is contained
+in the \texttt{linked-lists} directory.
+
+\section{Your Work}
+
+Your job now is to write functions along with their corresponding tests.  We have left stub
+functions along with documentation in the source code.  It is common practice to write the test
+cases \emph{first}, before filling in the stub function.  This way the tests can verify for you
+immediately when you are done. You don't have to do it that way, though.
+
+The functions you have to write are as follows:
+
+\begin{itemize}
+\item \texttt{insert-at-beginning} --- You did this by now.
+\item \texttt{insert-at-end} --- Insert at the far end, copying the whole list as you go.
+\item \texttt{sorted-insert} --- Insert in the middle, according to the value of the item.
+\item \texttt{search} --- Find an element if the list.
+\item \texttt{delete} --- Remove an element from the list.
+\item \texttt{delete-all} --- Remove all copies of a given element from the list.
+\item \texttt{efficient-delete} --- This one is like \texttt{delete}, but if you try to delete
+  something that is not there, it will return a pointer to the \emph{original} list.
+\end{itemize}
+
+You should check that functions like insert and delete share memory properly.  Consider the
+following two lines:
+
+\begin{clojurecode}
+  (should= x y)
+  (should (identical? x y))
+\end{clojurecode}
+
+The first line checks if \texttt{x} and \texttt{y} are mathematically the same.  The second line
+checks if \texttt{x} and \texttt{y} refer to the same memory location.
+
+\subsection{Using Git}
+
+Whenever you make significant changes to your code, it is a good idea to commit your work.  To do
+this, first use \texttt{git add} to stage the files you changed.  Then use \texttt{git commit -m
+  "Your log message here"} (with an appropriate log message) to explain what you did.  Finally, use
+\texttt{git push} to send your work to the bitbucket server.  It is important to do this for a few
+reasons.  First, this is how you will turn in your work.  Second, it serves as a nice backup
+solution in case your local copy gets messed up or goes missing.
+
+Your lab will be graded by a grading script.  The script will allow you to turn in a copy once every
+15 minutes.  When it is done grading, it will write a file called \texttt{linked-lists.txt} to a
+directory called \texttt{reports} in your repository.  Check it to see if you lost any points.  You
+can submit as many times as you want before the deadline.
+
+The grading script usually starts on Wednesday or Thursday after the lab is assigned.  Once it is
+turned on, you have seven days to finish.  We will post on Piazza when this happens.  Since this is
+the first lab, expect a false start or two as we get the system online.
+
+\end{document}

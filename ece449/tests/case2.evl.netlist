@@ -1,0 +1,20 @@
+module top
+nets 11
+  net in[0] 0
+  net in[1] 1
+    evl_output sim_out 1
+  net in[2] 1
+    evl_output sim_out 1
+  net in[3] 0
+  net in[4] 0
+  net out[0] 0
+  net out[1] 0
+  net out[2] 0
+  net out[3] 1
+    evl_output sim_out 0
+  net out[4] 0
+  net out[5] 0
+components 1
+  component evl_output sim_out 2
+    pin 1 out[3]
+    pin 2 in[1] in[2]

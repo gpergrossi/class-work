@@ -1,0 +1,5 @@
+module top; //comment (<-- not a symbol -->) ;;;;
+   
+   wire s0, s1, clk;  
+
+endmodule

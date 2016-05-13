@@ -1,0 +1,5 @@
+module top
+wires 3
+  wire a 1
+  wire b 1
+  wire c 1

@@ -1,0 +1,11 @@
+NAME module
+NAME top
+SINGLE ;
+NAME wire
+NAME s0
+SINGLE ,
+NAME s1
+SINGLE ,
+NAME clk
+SINGLE ;
+NAME endmodule

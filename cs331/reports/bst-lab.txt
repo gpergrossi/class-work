@@ -1,0 +1,80 @@
+Lab report for BST Lab - gpergros
+Timestamp: 2013-12-09 23:40:41
+
+|  :scenario |                                :title |                   :result | :score |
+|------------+---------------------------------------+---------------------------+--------|
+|    working | Test student code vs instructor tests |                      Pass |     45 |
+| qualifying | Test student tests vs instructor code |                      Fail |      3 |
+| qualifying |           Qualifying Scenarios Failed | No further scenarios run. |      0 |
+|      total |                           Total Score |                           |     48 |
+
+Details:
+
+
+** Details for Test student code vs instructor tests
+
+WARNING: find already refers to: #'clojure.core/find in namespace: bst.core, being replaced by: #'bst.core/find
+WARNING: find already refers to: #'clojure.core/find in namespace: bst.core-spec, being replaced by: #'bst.core/find
+...................
+
+Finished in 0.01157 seconds
+19 examples, 0 failures
+
+
+** Details for Test student tests vs instructor code
+
+WARNING: find already refers to: #'clojure.core/find in namespace: bst.core, being replaced by: #'bst.core/find
+WARNING: find already refers to: #'clojure.core/find in namespace: bst.core-spec, being replaced by: #'bst.core/find
+...F..FF..FF.
+
+Failures:
+
+  1) add sets size correctly
+     java.lang.Long cannot be cast to clojure.lang.Keyword
+     java.lang.ClassCastException: java.lang.Long cannot be cast to clojure.lang.Keyword
+     	... 2 stack levels elided ...
+     	at bst.core$add_aux.invoke(core.clj:49)
+     	at bst.core$add.invoke(core.clj:37)
+     	at bst.core_spec$eval1290$fn__1291$fn__1299.invoke(/home/grader/quarry/bst-lab/gpergros/running/spec/bst/core_spec.clj:62)
+     	... 42 stack levels elided ...
+
+  2) find-key finds keys
+     java.lang.Long cannot be cast to java.lang.String
+     java.lang.ClassCastException: java.lang.Long cannot be cast to java.lang.String
+     	... 2 stack levels elided ...
+     	at bst.core$find_key_aux.invoke(core.clj:85)
+     	at bst.core$find_key.invoke(core.clj:79)
+     	at bst.core_spec$eval1333$fn__1334$fn__1339.invoke(/home/grader/quarry/bst-lab/gpergros/running/spec/bst/core_spec.clj:72)
+     	... 42 stack levels elided ...
+
+  3) find-key does not find missing entries
+     java.lang.String cannot be cast to clojure.lang.Keyword
+     java.lang.ClassCastException: java.lang.String cannot be cast to clojure.lang.Keyword
+     	... 2 stack levels elided ...
+     	at bst.core$find_key_aux.invoke(core.clj:85)
+     	at bst.core$find_key_aux.invoke(core.clj:86)
+     	at bst.core$find_key_aux.invoke(core.clj:87)
+     	at bst.core$find_key.invoke(core.clj:79)
+     	at bst.core_spec$eval1333$fn__1334$fn__1343.invoke(/home/grader/quarry/bst-lab/gpergros/running/spec/bst/core_spec.clj:74)
+     	... 42 stack levels elided ...
+
+  4) delete-value deletes a value that exists
+     clojure.lang.Keyword cannot be cast to java.lang.String
+     java.lang.ClassCastException: clojure.lang.Keyword cannot be cast to java.lang.String
+     	... 2 stack levels elided ...
+     	at bst.core$delete_value_aux.invoke(core.clj:134)
+     	at bst.core$delete_value.invoke(core.clj:145)
+     	at bst.core_spec$eval1381$fn__1382$fn__1387.invoke(/home/grader/quarry/bst-lab/gpergros/running/spec/bst/core_spec.clj:90)
+     	... 42 stack levels elided ...
+
+  5) delete-value does not delete missing values
+     clojure.lang.Keyword cannot be cast to java.lang.String
+     java.lang.ClassCastException: clojure.lang.Keyword cannot be cast to java.lang.String
+     	... 2 stack levels elided ...
+     	at bst.core$delete_value_aux.invoke(core.clj:134)
+     	at bst.core$delete_value.invoke(core.clj:145)
+     	at bst.core_spec$eval1381$fn__1382$fn__1392.invoke(/home/grader/quarry/bst-lab/gpergros/running/spec/bst/core_spec.clj:93)
+     	... 42 stack levels elided ...
+
+Finished in 0.00565 seconds
+13 examples, 5 failures

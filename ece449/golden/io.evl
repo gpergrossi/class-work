@@ -1,0 +1,11 @@
+// Input only for counter
+
+module counter;
+
+  wire [15:0] in;
+  wire set;
+
+  evl_input sim_in(set, in);
+  evl_output sim_out(set, in);
+
+endmodule
